@@ -1,60 +1,39 @@
-# 🐱 Yuumi Bot Reborn
+# 🐱 Yuumi Bot Reborn (Minha versão corrigida)
 
-> **Nota**: Este projeto é um fork modernizado e corrigido do original [yuumi-bot](https://github.com/SvetoslavDoychinov/yuumi-bot). Nosso foco foi reviver o bot para funcionar no Client atual do League of Legends (2025), corrigindo interações quebradas com a API.
+Salve! Resolvi pegar esse projeto antigo do [yuumi-bot](https://github.com/SvetoslavDoychinov/yuumi-bot) pra dar uma atualizada, já que ele não estava nem abrindo mais com o Client novo do LoL (2025).
 
-## 📖 O que é isso?
+Basicamente, eu queria algo que funcionasse sem ficar crashando toda hora, então fiz várias correções e melhorias no código "por baixo do capô" pra deixar ele estável. Tô subindo aqui pra deixar documentado e caso sirva pra mais algúem.
 
-O **Yuumi Bot Reborn** é uma ferramenta de automação desenvolvida em Python para League of Legends. Ele foi projetado para simular um jogador de suporte (especificamente com a campeã Yuumi), automatizando desde a criação do lobby até as ações dentro da partida.
+## 🛠️ O que eu arrumei (Changelog Pessoal)
 
-Ao contrário de scripts complexos de injeção direta na memória (que dão banimento rápido), este bot foca em usar a **LCU API** (a API local oficial do cliente do LoL) e reconhecimento visual simples, tornando-o mais uma "ferramenta de auxílio" do que um hack agressivo.
+O código original era bom, mas a API do LoL mudou muito. Aqui o que eu tive que mexer:
 
-## ✨ O que há de novo? (Nossas Melhorias)
+*   **API Hardening (Blindagem)**: O bot original adorava fechar sozinho se a API do LoL demorasse 1 segundo a mais pra responder. Enchi de proteções (`try/catch`) nas chamadas de rede. Agora se o LoL engasgar na tela de loading, o bot espera de boa em vez de crashar com `KeyError`.
+*   **Troca de Roles (Draft Pick)**: Eu queria usar isso em Draft, mas o bot as vezes caía Jungle ou Top e ficava lá parado. Implementei uma lógica nova: se eu não cair Suporte, ele automaticamente spamma pedido de troca ou aceita qualquer troca que mandarem, até cair na role certa.
+*   **Riot ID**: Tive que arrumar a detecção de nomes. O bot não reconhecia o próprio jogador por causa das tags (`Nome#BR1`). Agora ele ignora a tag e acha o boneco certo.
+*   **Adeus, Processos Zumbis**: Arrumei um bug chato onde o bot tentava ler memória de um jogo que já tinha fechado, o que travava o script.
+*   **GUI (Interface)**: Cansei de ficar editando o `config.py` ou `constants.py` toda vez que queria mudar de fila. Fiz uma interfacezinha rápida (`gui.py`) com tema escuro pra selecionar o modo e dar Play.
+*   **Filas**: Atualizei os IDs das filas (Co-op vs AI Intermediário mudou de ID, tive que caçar o novo).
 
-O projeto original estava abandonado e não funcionava mais nas versões recentes do jogo. Nós implementamos:
+## 🚀 Como botar pra rodar
 
-*   **🛡️ Blindagem de API (Anti-Crash)**: O bot não fecha mais sozinho quando o LoL demora para carregar ou retorna dados incompletos. Tratamos erros como `KeyError` em nomes de invocador e falhas de conexão durante telas de carregamento.
-*   **🔄 Troca de Roles Inteligente**: Em filas Draft, o bot identifica se caiu como Suporte. Se cair em outra posição (ex: Jungle), ele automaticamente pede troca com o suporte ou aceita trocas recebidas.
-*   **🆔 Suporte a Riot ID**: Corrigido o bug onde o bot não reconhecia o próprio jogador devido às novas tags (`#BR1`) nos nomes.
-*   **🖥️ Nova Interface Gráfica**: Adicionamos um painel de controle (`gui.py`) com tema escuro para você não precisar ficar editando código para mudar entre Fila Ranqueada ou Bot.
-*   **Co-op vs AI Atualizado**: IDs das filas de bot (Intro/Intermediário) atualizados para os padrões de 2025.
+É Python puro.
+1.  Clona o repo.
+2.  Instala as libs: `pip install -r requirements.txt`
+3.  Roda a interface: `python gui.py`
 
-## 🚀 Como Usar
+**Dica de amigo**: Deixa o LoL em 1024x768 (Janela). O bot usa reconhecimento de imagem pra aceitar fila e tals, se mudar a resolução ele fica cego.
 
-### Pré-requisitos
-*   Python 3.10+ instalado.
-*   Cliente do League of Legends aberto e logado.
-*   Resolução do jogo deve estar em **1024x768** e modo **Janela** (Windowed) para o reconhecimento visual funcionar perfeitamente.
+## ⚙️ Sobre o Gameplay
 
-### Instalação
-1.  Clone este repositório:
-    ```bash
-    git clone https://github.com/tarikpac/yuumi-bot-reborn.git
-    cd yuumi-bot-reborn
-    ```
-2.  Instale as dependências:
-    ```bash
-    pip install -r requirements.txt
-    ```
+Eu deixei dois modos na interface:
+1.  **Auto-Fila**: Só aceita a partida, picka e ajeita a role. Qunado o jogo começa, ele para. (É o que eu uso pra não tomar ban de script).
+2.  **Gameplay Full**: A lógica original da Yuumi (ficar no ADC, curar, ultar). Eu **comentei** essa parte no código por segurança, mas se você quiser ativar, é só descomentar no `yuumi.py`. A estrutura tá toda lá funcionando.
 
-### Rodando
-Execute a nova interface gráfica:
-```bash
-python gui.py
-```
-Selecione o tipo de fila (ex: "Draft Pick" ou "Intermediate Bot") e clique em **INICIAR BOT**.
+## ⚠️ Disclaimer
 
-## ⚙️ Modos de Operação
+Eu não sou da Riot, fiz isso aqui num fim de semana pra aprender e testar. 
+Se você usar isso e sua conta for de base (banida), **a culpa é sua**. Automação é contra os termos de uso. Use com moderação (ou só em conta smurf/bot).
 
-O bot possui dois modos principais (selecionáveis na GUI):
-
-1.  **Somente Auto-Fila**: O bot fará todo o trabalho chato de criar sala, aceitar partida, escolher campeão e trocar de role se necessário. Quando o jogo começar, ele para e deixa você jogar.
-2.  **Yuumi In-Game Completo**: O bot joga a partida inteira. Ele se conecta ao ADC (ou aliado mais forte), cura, usa ultimate, compra itens e volta base se estiver com pouca vida. *(Nota: Por padrão, a lógica in-game está desativada no código para segurança, mas pode ser reativada facilmente).*
-
-## ⚠️ Aviso Legal e Responsabilidade
-
-**Este bot não é endossado pela Riot Games e não reflete as opiniões da Riot Games ou de qualquer pessoa oficialmente envolvida na produção ou gerenciamento do League of Legends.**
-
-O uso de programas de automação ("bots") viola os Termos de Serviço do League of Legends.
-*   **Use por sua conta e risco.**
-*   Não nos responsabilizamos por banimentos ou suspensões de contas.
-*   Este projeto é puramente educacional, demonstrando como interagir com a API LCU e automação de GUI.
+---
+*Fork mantido por [TarikPac](https://github.com/tarikpac).*
