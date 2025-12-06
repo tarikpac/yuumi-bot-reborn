@@ -30,10 +30,10 @@ Eu deixei dois modos na interface:
 1.  **Auto-Fila**: Só aceita a partida, picka e ajeita a role. Qunado o jogo começa, ele para. (É o que eu uso pra não tomar ban de script).
 2.  **Gameplay Full**: A lógica original da Yuumi (ficar no ADC, curar, ultar). Eu **comentei** essa parte no código por segurança, mas se você quiser ativar, é só descomentar no `yuumi.py`. A estrutura tá toda lá funcionando.
 
-## ⚠️ Disclaimer
+## ⚠️ Aviso Legal (Disclaimer)
 
-Eu não sou da Riot, fiz isso aqui num fim de semana pra aprender e testar. 
-Se você usar isso e sua conta for de base (banida), **a culpa é sua**. Automação é contra os termos de uso. Use com moderação (ou só em conta smurf/bot).
+**Este projeto não é endossado pela Riot Games e não reflete as opiniões ou visões da Riot Games ou de qualquer pessoa oficialmente envolvida na produção ou gerenciamento do League of Legends. League of Legends e Riot Games são marcas comerciais ou marcas registradas da Riot Games, Inc. League of Legends © Riot Games, Inc.**
 
----
+Este software interage com outros programas e serviços (League of Legends). Ao utilizá-lo, você assume total responsabilidade por quaisquer violações dos Termos de Serviço da Riot Games e por quaisquer consequências às contas utilizadas (incluindo suspensões ou banimentos permanentes). Você concorda em utilizar este software estritamente por sua própria conta e risco.
+
 *Fork mantido por [TarikPac](https://github.com/tarikpac).*
